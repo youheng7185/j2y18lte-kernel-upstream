@@ -239,7 +239,6 @@
 #define KASAN_ABI_VERSION 3
 #endif
 
-<<<<<<< HEAD
 #if GCC_VERSION >= 40902
 /*
  * Tell the compiler that address safety instrumentation (KASAN)
@@ -249,8 +248,6 @@
 #define __no_sanitize_address __attribute__((no_sanitize_address))
 #endif
 
-=======
->>>>>>> 677fa15cd6d5... compiler-gcc: integrate the various compiler-gcc[345].h files
 #endif	/* gcc version >= 40000 specific checks */
 
 #if !defined(__noclone)
