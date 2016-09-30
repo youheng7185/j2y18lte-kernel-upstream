@@ -312,6 +312,21 @@ static pid_t pid_of_stack(struct proc_maps_private *priv,
 	rcu_read_unlock();
 
 	return ret;
+
+/*
+ * Indicate if the VMA is a stack for the given task; for
+ * /proc/PID/maps that is the stack of the main task.
+ */
+static int is_stack(struct proc_maps_private *priv,
+		    struct vm_area_struct *vma)
+{
+	/*
+	 * We make no effort to guess what a given thread considers to be
+	 * its "stack".  It's not even well-defined for programs written
+	 * languages like Go.
+	 */
+	return vma->vm_start <= vma->vm_mm->start_stack &&
+		vma->vm_end >= vma->vm_mm->start_stack;
 }
 
 static void
@@ -401,6 +416,8 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
 			seq_pad(m, ' ');
 			seq_print_vma_name(m, vma);
 		}
+		if (is_stack(priv, vma))
+			name = "[stack]";
 	}
 
 done:
@@ -1904,6 +1921,8 @@ static int show_numa_map(struct seq_file *m, void *v, int is_pid)
 		seq_path(m, &file->f_path, "\n\t= ");
 	} else if (vma->vm_start <= mm->brk && vma->vm_end >= mm->start_brk) {
 		seq_puts(m, " heap");
+	} else if (is_stack(proc_priv, vma)) {
+		seq_puts(m, " stack");
 	} else {
 		pid_t tid = pid_of_stack(proc_priv, vma, is_pid);
 		if (tid != 0) {
