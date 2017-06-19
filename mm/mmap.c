@@ -2267,6 +2267,17 @@ int expand_upwards(struct vm_area_struct *vma, unsigned long address)
 		/* Check that both stack segments have the same anon_vma? */
 	}
 
+	/* Enforce stack_guard_gap */
+	gap_addr = address + stack_guard_gap;
+	if (gap_addr < address)
+		return -ENOMEM;
+	next = vma->vm_next;
+	if (next && next->vm_start < gap_addr) {
+		if (!(next->vm_flags & VM_GROWSUP))
+			return -ENOMEM;
+		/* Check that both stack segments have the same anon_vma? */
+	}
+
 	/* We must make sure the anon_vma is allocated. */
 	if (unlikely(anon_vma_prepare(vma)))
 		return -ENOMEM;
@@ -2328,7 +2339,7 @@ int expand_downwards(struct vm_area_struct *vma,
 				   unsigned long address)
 {
 	struct vm_area_struct *prev;
-	unsigned long gap_addr;	
+	unsigned long gap_addr;
 	int error;
 
 	address &= PAGE_MASK;
