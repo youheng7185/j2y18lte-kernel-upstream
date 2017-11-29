@@ -200,10 +200,8 @@ static int hmac_create(struct crypto_template *tmpl, struct rtattr **tb)
 	err = -EINVAL;
 	if (crypto_shash_alg_has_setkey(salg))
 		goto out_put_alg;
-	
 	ds = salg->digestsize;
 	ss = salg->statesize;
-	
 	if (ds > alg->cra_blocksize ||
 	    ss < alg->cra_blocksize)
 		goto out_put_alg;
