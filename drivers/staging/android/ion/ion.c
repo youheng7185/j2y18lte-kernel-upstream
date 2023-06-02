@@ -408,7 +408,6 @@ static void ion_handle_get(struct ion_handle *handle)
 	kref_get(&handle->ref);
 }
 
-<<<<<<< HEAD
 /* Must hold the client lock */
 static struct ion_handle* ion_handle_get_check_overflow(struct ion_handle *handle)
 {
@@ -418,8 +417,6 @@ static struct ion_handle* ion_handle_get_check_overflow(struct ion_handle *handl
 	return handle;
 }
 
-=======
->>>>>>> f63514257efd... staging/android/ion : fix a race condition in the ion driver
 static int ion_handle_put_nolock(struct ion_handle *handle)
 {
 	int ret;
@@ -510,7 +507,6 @@ static struct ion_handle *ion_handle_get_by_id_nolock(struct ion_client *client,
 
 	handle = idr_find(&client->idr, id);
 	if (handle)
-<<<<<<< HEAD
 		return ion_handle_get_check_overflow(handle);
 
 	return ERR_PTR(-EINVAL);
@@ -524,9 +520,6 @@ struct ion_handle *ion_handle_get_by_id(struct ion_client *client,
 	mutex_lock(&client->lock);
 	handle = ion_handle_get_by_id_nolock(client, id);
 	mutex_unlock(&client->lock);
-=======
-		ion_handle_get(handle);
->>>>>>> f63514257efd... staging/android/ion : fix a race condition in the ion driver
 
 	return handle;
 }
@@ -724,15 +717,11 @@ static void user_ion_free_nolock(struct ion_client *client,
 		WARN(1, "%s: invalid handle passed to free.\n", __func__);
 		return;
 	}
-<<<<<<< HEAD
 	if (!handle->user_ref_count > 0) {
 		WARN(1, "%s: User does not have access!\n", __func__);
 		return;
 	}
-	user_ion_handle_put_nolock(handle);
-=======
 	ion_handle_put_nolock(handle);
->>>>>>> f63514257efd... staging/android/ion : fix a race condition in the ion driver
 }
 
 void ion_free(struct ion_client *client, struct ion_handle *handle)
