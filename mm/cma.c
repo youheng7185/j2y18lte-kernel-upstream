@@ -66,12 +66,6 @@ static unsigned long cma_bitmap_aligned_mask(const struct cma *cma,
  * Find the offset of the base PFN from the specified align_order.
  * The value returned is represented in order_per_bits.
  */
-static unsigned long cma_bitmap_aligned_offset(const struct cma *cma,
-					       unsigned int align_order)
-{
-	return (cma->base_pfn & ((1UL << align_order) - 1))
-		>> cma->order_per_bit;
-}
 
 static unsigned long cma_bitmap_pages_to_bits(const struct cma *cma,
 					      unsigned long pages)
