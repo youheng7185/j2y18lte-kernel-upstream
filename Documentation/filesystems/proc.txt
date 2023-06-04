@@ -375,7 +375,6 @@ is not associated with a file:
 
  or if empty, the mapping is anonymous.
 
-
 The /proc/PID/task/TID/maps is a view of the virtual memory from the viewpoint
 of the individual tasks of a process. In this file you will see a mapping marked
 as [stack] if that task sees it as a stack. This is a key difference from the
